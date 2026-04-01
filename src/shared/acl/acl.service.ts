@@ -30,7 +30,14 @@ export class BaseAclService<Resource> {
       canDoAction: (action: Action, resource?: Resource) => {
         let canDoAction = false;
 
-        actor.roles.forEach((actorRole) => {
+        const actorRoles =
+          actor.roles && actor.roles.length > 0
+            ? actor.roles
+            : actor.role
+              ? [actor.role]
+              : [];
+
+        actorRoles.forEach((actorRole) => {
           //If already has access, return
           if (canDoAction) return true;
 

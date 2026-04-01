@@ -17,10 +17,22 @@ async function bootstrap() {
 
   /** Swagger configuration*/
   const options = new DocumentBuilder()
-    .setTitle('Nestjs API starter')
-    .setDescription('Nestjs API description')
-    .setVersion('1.0')
+    .setTitle('E-Learning Platform API')
+    .setDescription('MVP E-Learning Platform - LMS/CMS REST API with JWT authentication')
+    .setVersion('1.0.0')
     .addBearerAuth()
+    .addTag('auth', 'Authentication and user management')
+    .addTag('cms', 'Content Management System - Course creation and management')
+    .addTag('lms', 'Learning Management System - Course enrollment and learning')
+    .addTag('quiz', 'Quiz management and submissions')
+    .addTag('progress', 'Progress tracking and analytics')
+    .addTag('certificates', 'Certificate generation and verification')
+    .addTag('assets', 'Asset and media management')
+    .addTag('videos', 'Video management')
+    .addTag('announcements', 'Course announcements')
+    .addTag('teams', 'Course team collaboration')
+    .addTag('notifications', 'Notification management')
+    .addTag('grading', 'Grading system')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);

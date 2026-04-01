@@ -13,6 +13,25 @@ updates:
     # Check the npm registry for updates every day (weekdays)
     schedule:
       interval: 'weekly'
+    ignore:
+      # Keep NestJS major updates manual to avoid peer-resolution CI breakage.
+      - dependency-name: '@nestjs/common'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@nestjs/core'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@nestjs/config'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@nestjs/platform-express'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@nestjs/swagger'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@nestjs/testing'
+        update-types: ['version-update:semver-major']
+      # Prisma major bumps are handled intentionally alongside schema/tooling checks.
+      - dependency-name: '@prisma/client'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'prisma'
+        update-types: ['version-update:semver-major']
 
   # Enable version updates for Docker
   - package-ecosystem: 'docker'

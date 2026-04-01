@@ -1,6 +1,13 @@
 node_modules
-npm-debug.log
 dist
+coverage
 .git
+.github
+.kiro
+uploads
+*.log
+*.md
+*.txt
 .env
-local
+.env.*
+!.env.template

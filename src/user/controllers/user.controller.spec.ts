@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { ROLE } from '../../auth/constants/role.constant';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 import { PaginationParamsDto } from '../../shared/dtos/pagination-params.dto';
 import { AppLogger } from '../../shared/logger/logger.service';
 import { RequestContext } from '../../shared/request-context/request-context.dto';
@@ -26,7 +27,10 @@ describe('UserController', () => {
         { provide: UserService, useValue: mockedUserService },
         { provide: AppLogger, useValue: mockedLogger },
       ],
-    }).compile();
+    })
+      .overrideGuard(RolesGuard)
+      .useValue({ canActivate: () => true })
+      .compile();
 
     controller = moduleRef.get<UserController>(UserController);
   });

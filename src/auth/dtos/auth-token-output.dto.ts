@@ -15,11 +15,30 @@ export class AuthTokenOutput {
 
 export class UserAccessTokenClaims {
   @Expose()
-  id: number;
+  id: number | string;
+
   @Expose()
-  username: string;
+  username?: string;
+
+  /** Legacy TypeORM JWT (array of ROLE) */
   @Expose()
-  roles: ROLE[];
+  roles?: ROLE[];
+
+  /** Prisma JWT strategy (`JwtPrismaStrategy`) */
+  @Expose()
+  role?: string;
+
+  @Expose()
+  email?: string;
+
+  @Expose()
+  language?: string;
+
+  @Expose()
+  firstName?: string;
+
+  @Expose()
+  lastName?: string;
 }
 
 export class UserRefreshTokenClaims {

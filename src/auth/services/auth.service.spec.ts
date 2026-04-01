@@ -40,7 +40,9 @@ describe('AuthService', () => {
     email: 'randomUser@random.com',
     createdAt: currentDate,
     updatedAt: currentDate,
-    ...accessTokenClaims,
+    id: accessTokenClaims.id as number,
+    username: accessTokenClaims.username ?? 'john',
+    roles: accessTokenClaims.roles ?? [ROLE.USER],
   };
 
   const authToken: AuthTokenOutput = {

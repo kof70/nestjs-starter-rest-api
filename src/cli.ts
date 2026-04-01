@@ -11,19 +11,32 @@ async function bootstrap() {
   const app = await NestFactory.createApplicationContext(AppModule);
 
   const configService = app.get(ConfigService);
-  const defaultAdminUserPassword = configService.get<string>(
+  const defaultAdminUserEmail = configService.get<string | undefined>(
+    'defaultAdminUserEmail',
+  );
+  const defaultAdminUsername = configService.get<string | undefined>(
+    'defaultAdminUsername',
+  );
+  const defaultAdminUserPassword = configService.get<string | undefined>(
     'defaultAdminUserPassword',
-  )!;
+  );
+  if (!defaultAdminUserEmail || !defaultAdminUsername || !defaultAdminUserPassword) {
+    console.warn(
+      'DEFAULT_ADMIN_USER_EMAIL / DEFAULT_ADMIN_USER_USERNAME / DEFAULT_ADMIN_USER_PASSWORD must all be set. Skipping default admin bootstrap.',
+    );
+    await app.close();
+    return;
+  }
 
   const userService = app.get(UserService);
 
   const defaultAdmin: CreateUserInput = {
     name: 'Default Admin User',
-    username: 'default-admin',
+    username: defaultAdminUsername,
     password: defaultAdminUserPassword,
     roles: [ROLE.ADMIN],
     isAccountDisabled: false,
-    email: 'default-admin@example.com',
+    email: defaultAdminUserEmail,
   };
 
   const ctx = new RequestContext();

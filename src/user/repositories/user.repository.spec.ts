@@ -1,6 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DataSource } from 'typeorm';
 
 import { ROLE } from '../../auth/constants/role.constant';
 import { User } from '../entities/user.entity';
@@ -9,23 +8,9 @@ import { UserRepository } from './user.repository';
 describe('UserRepository', () => {
   let repository: UserRepository;
 
-  let dataSource: {
-    createEntityManager: jest.Mock;
-  };
-
   beforeEach(async () => {
-    dataSource = {
-      createEntityManager: jest.fn(),
-    };
-
     const moduleRef: TestingModule = await Test.createTestingModule({
-      providers: [
-        UserRepository,
-        {
-          provide: DataSource,
-          useValue: dataSource,
-        },
-      ],
+      providers: [UserRepository],
     }).compile();
 
     repository = moduleRef.get<UserRepository>(UserRepository);

@@ -16,6 +16,6 @@ export class ArticleAclService extends BaseAclService<Article> {
   }
 
   isArticleAuthor(article: Article, user: Actor): boolean {
-    return article.author.id === user.id;
+    return String(article.author.id) === String(user.id);
   }
 }

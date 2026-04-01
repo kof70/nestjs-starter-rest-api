@@ -19,6 +19,6 @@ export class UserAclService extends BaseAclService<User> {
   }
 
   isUserItself(resource: User, actor: Actor): boolean {
-    return resource.id === actor.id;
+    return String(resource.id) === String(actor.id);
   }
 }

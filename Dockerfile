@@ -1,30 +1,26 @@
-# Development Dockerfile
-FROM node:20.19.6-bookworm-slim
+FROM node:20-alpine AS base
+WORKDIR /app
 
-# Install additional tools for development
-RUN apt-get update && apt-get install -y \
-  vim \
-  curl \
-  wget \
-  git \
-  && apt-get clean \
-  && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /usr/src/app
-
-# Copy and install dependencies
+FROM base AS deps
 COPY package.json package-lock.json ./
-RUN npm install
+RUN npm ci
 
-# Copy the rest of the application files
-COPY . .
+FROM deps AS build
+COPY tsconfig.json tsconfig.build.json nest-cli.json ./
+COPY prisma ./prisma
+COPY src ./src
+RUN npx prisma generate
+RUN npm run build && test -f dist/main.js
+RUN npm prune --omit=dev
 
-# Set the environment variables
-ARG APP_ENV=development
-ENV NODE_ENV=${APP_ENV}
+FROM node:20-alpine AS runtime
+ENV NODE_ENV=production
+WORKDIR /app
 
-# Expose the application port
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/prisma ./prisma
+COPY --from=build /app/dist ./dist
+
 EXPOSE 3000
-
-# Set the default command to run the application with nodemon
-CMD ["npm", "start:dev"]
+CMD ["node", "dist/main.js"]

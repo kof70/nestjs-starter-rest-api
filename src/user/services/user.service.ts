@@ -76,22 +76,22 @@ export class UserService {
     return { users: usersOutput, count };
   }
 
-  async findById(ctx: RequestContext, id: number): Promise<UserOutput> {
+  async findById(ctx: RequestContext, id: number | string): Promise<UserOutput> {
     this.logger.log(ctx, `${this.findById.name} was called`);
 
     this.logger.log(ctx, `calling ${UserRepository.name}.findOne`);
-    const user = await this.repository.findOne({ where: { id } });
+    const user = await this.repository.findOne({ where: { id: id as number } });
 
     return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,
     });
   }
 
-  async getUserById(ctx: RequestContext, id: number): Promise<UserOutput> {
+  async getUserById(ctx: RequestContext, id: number | string): Promise<UserOutput> {
     this.logger.log(ctx, `${this.getUserById.name} was called`);
 
     this.logger.log(ctx, `calling ${UserRepository.name}.getById`);
-    const user = await this.repository.getById(id);
+    const user = await this.repository.getById(id as number);
 
     return plainToClass(UserOutput, user, {
       excludeExtraneousValues: true,
